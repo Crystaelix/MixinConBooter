@@ -1,0 +1,175 @@
+plugins {
+	id "com.crystaelix.loom" version "1.10.0"
+	id "eclipse"
+	id "idea"
+	id "maven-publish"
+	id "net.kyori.blossom" version "[1,2)"
+	id "me.modmuss50.mod-publish-plugin" version "0.8.4"
+}
+
+repositories {
+	mavenCentral()
+	flatDir {
+		dirs "libs"
+	}
+	exclusiveContent {
+		forRepository {
+			maven {
+				url = "https://repo.cleanroommc.com/releases/"
+			}
+		}
+		filter {
+			includeGroup "zone.rong"
+		}
+	}
+	exclusiveContent {
+		forRepository {
+			maven {
+				url = "https://jitpack.io/"
+			}
+		}
+		filter {
+			includeGroup "com.github.LegacyModdingMC.UniMixins"
+		}
+	}
+}
+
+def specVersion = "1"
+def vendor = "thelm"
+def corePluginClass = "com.crystaelix.mixinconbooter.MixinConBooterLoadingPlugin"
+
+group = "com.crystaelix"
+version = "1.0"
+
+archivesBaseName = "mixinconbooter"
+
+sourceSets {
+	main {
+		output.resourcesDir = java.destinationDirectory = layout.buildDirectory.dir("outputs/main")
+	}
+}
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(8)
+		vendor = JvmVendorSpec.AZUL
+	}
+	withSourcesJar()
+}
+
+tasks.withType(JavaCompile).configureEach {
+	options.encoding = "UTF-8"
+}
+
+loom {
+	silentMojangMappingsLicense()
+	runs {
+		configureEach {
+			property "fabric.log.console.level", "debug"
+			property "fml.coreMods.load", corePluginClass
+			environmentVariable "MC_VERSION", "1.12.2"
+		}
+		client {
+			programArg "--username=Dev"
+		}
+		server
+	}
+	generatedIntermediateMappings()
+}
+
+dependencies {
+	// Log4j
+	implementation "org.apache.logging.log4j:log4j-core:2.24.3"
+
+	// Minecraft
+	minecraft "com.mojang:minecraft:1.12.2"
+	mappings "de.oceanlabs.mcp:mcp_stable:39-1.12"
+	legacyForge "net.minecraftforge:forge:1.12.2-14.23.5.2860"
+
+	// Dependencies
+	implementation("zone.rong:mixinbooter:10.6") {transitive = false}
+}
+
+def replacements = [
+	"0@VERSION@": version
+]
+
+blossom {
+	replaceToken(replacements)
+}
+
+processResources {
+	inputs.properties(replacements)
+	filesMatching(["mcmod.info", "META-INF/mods.toml", "META-INF/neoforge.mods.toml"]) {
+		filter {
+			it.replace(replacements)
+		}
+	}
+}
+
+def manifestAttributes = [
+	"Specification-Title": archivesBaseName,
+	"Specification-Vendor": vendor,
+	"Specification-Version": specVersion,
+	"Implementation-Title": archivesBaseName,
+	"Implementation-Version": version,
+	"Implementation-Vendor": vendor,
+	"FMLCorePlugin": corePluginClass,
+	"FMLCorePluginContainsFMLMod": "true"
+]
+
+jar {
+	manifest.attributes(manifestAttributes)
+}
+
+sourcesJar {
+	manifest.attributes(manifestAttributes)
+}
+
+publishing {
+	publications {
+		register("mavenJava", MavenPublication) {
+			artifactId = archivesBaseName
+			artifact remapJar
+			artifact sourcesJar
+		}
+	}
+	repositories {
+		if(project.hasProperty("CrystaelixMavenUsername") && project.hasProperty("CrystaelixMavenPassword")) {
+			maven {
+				name = "CrystaelixMaven"
+				url = "https://maven.crystaelix.com/releases/"
+				credentials(PasswordCredentials)
+			}
+		}
+	}
+}
+
+publishMods {
+	file = remapJar.archiveFile
+	version = displayName = project.version
+	changelog = file("changelog.md").text
+	type = ALPHA
+	modLoaders.add("forge")
+	additionalFiles.from(sourcesJar.archiveFile)
+
+	curseforge {
+		accessToken = providers.gradleProperty("curseforge.token")
+		projectId = "1302886"
+		minecraftVersionRange {
+			start = "1.8"
+			end = "1.12.2"
+		}
+		requires "mixin-booter"
+	}
+
+	modrinth {
+		accessToken = providers.gradleProperty("modrinth.token")
+		projectId = "boKqfS5e"
+		minecraftVersionRange {
+			start = "1.8"
+			end = "1.12.2"
+		}
+		requires "mixinbooter"
+	}
+}

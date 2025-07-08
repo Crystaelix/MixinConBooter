@@ -1,0 +1,11 @@
+[
+	{
+		"modid": "mixinconbooter",
+		"version": "0@VERSION@",
+		"name": "MixinConBooter",
+		"description": "A simple coremod to allow Mixin to load configurations specified in mod manifests by adding mods as Mixin containers.",
+		"logoFile": "mixinconbooter.logo.png",
+		"authorList": ["TheLMiffy1111"],
+		"url": "https://github.com/Crystaelix/MixinConBooter"
+	}
+]
