@@ -7,7 +7,6 @@ import java.util.Collections;
 import java.util.Deque;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.jar.Attributes;
@@ -22,12 +21,9 @@ import org.spongepowered.asm.util.Constants;
 
 import com.google.common.collect.Sets;
 
+import cpw.mods.fml.relauncher.FMLInjectionData;
+import cpw.mods.fml.relauncher.IFMLCallHook;
 import net.minecraft.launchwrapper.LaunchClassLoader;
-import net.minecraftforge.fml.relauncher.FMLInjectionData;
-import net.minecraftforge.fml.relauncher.IFMLCallHook;
-import net.minecraftforge.fml.relauncher.libraries.Artifact;
-import net.minecraftforge.fml.relauncher.libraries.LibraryManager;
-import net.minecraftforge.fml.relauncher.libraries.Repository;
 
 public class MixinConBooterCallHook implements IFMLCallHook {
 
@@ -109,27 +105,7 @@ public class MixinConBooterCallHook implements IFMLCallHook {
 	}
 
 	public static Set<File> getModCandidates() {
-		try {
-			Class.forName(LIBRARY_MANAGER_CLASS);
-			return getLibraryManagerCandidates();
-		}
-		catch(ClassNotFoundException e) {}
 		return getLegacyModCandidates();
-	}
-
-	public static Set<File> getLibraryManagerCandidates() {
-		Set<File> candidates = new LinkedHashSet<>(LibraryManager.gatherLegacyCanidates(mcLocation));
-		List<Artifact> mavenCanidates = LibraryManager.flattenLists(mcLocation);
-		for(Artifact artifact : mavenCanidates) {
-			artifact = Repository.resolveAll(artifact);
-			if(artifact != null) {
-				File target = artifact.getFile();
-				if(!candidates.contains(target)) {
-					candidates.add(target);
-				}
-			}
-		}
-		return candidates;
 	}
 
 	public static Set<File> getLegacyModCandidates() {

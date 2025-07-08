@@ -2,7 +2,7 @@ package com.crystaelix.mixinconbooter;
 
 import java.util.Map;
 
-import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
+import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 
 @IFMLLoadingPlugin.Name("MixinConBooter")
 @IFMLLoadingPlugin.SortingIndex(MixinConBooterLoadingPlugin.SORT_ORDER)

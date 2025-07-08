@@ -41,7 +41,7 @@ def corePluginClass = "com.crystaelix.mixinconbooter.MixinConBooterLoadingPlugin
 group = "com.crystaelix"
 version = "1.0"
 
-archivesBaseName = "mixinconbooter"
+archivesBaseName = "mixinconbooter-legacy"
 
 sourceSets {
 	main {
@@ -67,7 +67,6 @@ loom {
 		configureEach {
 			property "fabric.log.console.level", "debug"
 			property "fml.coreMods.load", corePluginClass
-			environmentVariable "MC_VERSION", "1.12.2"
 		}
 		client {
 			programArg "--username=Dev"
@@ -82,12 +81,12 @@ dependencies {
 	implementation "org.apache.logging.log4j:log4j-core:2.24.3"
 
 	// Minecraft
-	minecraft "com.mojang:minecraft:1.12.2"
-	mappings "de.oceanlabs.mcp:mcp_stable:39-1.12"
-	legacyForge "net.minecraftforge:forge:1.12.2-14.23.5.2860"
+	minecraft "com.mojang:minecraft:1.7.10"
+	mappings "net.minecraftforge:forge:1.7.10-10.13.4.1614-1.7.10:userdev"
+	legacyForge "net.minecraftforge:forge:1.7.10-10.13.4.1614-1.7.10:universal"
 
 	// Dependencies
-	implementation("zone.rong:mixinbooter:10.6") {transitive = false}
+	implementation("com.github.LegacyModdingMC.UniMixins:unimixins-all-1.7.10:0.1.20") {transitive = false}
 }
 
 def replacements = [
@@ -157,8 +156,8 @@ publishMods {
 		accessToken = providers.gradleProperty("curseforge.token")
 		projectId = "1302886"
 		minecraftVersionRange {
-			start = "1.8"
-			end = "1.12.2"
+			start = "1.6.1"
+			end = "1.7.10"
 		}
 		requires "mixin-booter"
 	}
@@ -167,8 +166,8 @@ publishMods {
 		accessToken = providers.gradleProperty("modrinth.token")
 		projectId = "boKqfS5e"
 		minecraftVersionRange {
-			start = "1.8"
-			end = "1.12.2"
+			start = "1.6.1"
+			end = "1.7.10"
 		}
 		requires "mixinbooter"
 	}
