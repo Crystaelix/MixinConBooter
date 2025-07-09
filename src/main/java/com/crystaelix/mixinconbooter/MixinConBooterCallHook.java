@@ -23,6 +23,7 @@ import org.spongepowered.asm.util.Constants;
 import com.google.common.collect.Sets;
 
 import net.minecraft.launchwrapper.LaunchClassLoader;
+import net.minecraftforge.fml.relauncher.CoreModManager;
 import net.minecraftforge.fml.relauncher.FMLInjectionData;
 import net.minecraftforge.fml.relauncher.IFMLCallHook;
 import net.minecraftforge.fml.relauncher.libraries.Artifact;
@@ -71,6 +72,7 @@ public class MixinConBooterCallHook implements IFMLCallHook {
 					LOGGER.debug("Mixin configs specified in manifest, adding as mixin container");
 					platform.addContainer(new ContainerHandleURI(candidate.toURI()));
 					classLoader.addURL(candidate.toURI().toURL());
+					CoreModManager.getReparseableCoremods().add(candidate.getName());
 				}
 			}
 			catch(Exception e) {
