@@ -2,7 +2,7 @@ package com.crystaelix.mixinconbooter;
 
 import net.minecraftforge.fml.common.Mod;
 
-@Mod(modid = MixinConBooter.MOD_ID, name = MixinConBooter.NAME, version = MixinConBooter.VERSION)
+@Mod(modid = MixinConBooter.MOD_ID, name = MixinConBooter.NAME, version = MixinConBooter.VERSION, acceptableRemoteVersions = "*")
 public class MixinConBooter {
 
 	public static final String MOD_ID = "mixinconbooter";
