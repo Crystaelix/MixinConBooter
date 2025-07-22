@@ -67,8 +67,10 @@ public class MixinConBooterCallHook implements IFMLCallHook {
 						attr.get(Constants.ManifestAttributes.MIXINCONNECTOR) != null) {
 					LOGGER.debug("Mixin configs specified in manifest, adding as mixin container");
 					platform.addContainer(new ContainerHandleURI(candidate.toURI()));
-					classLoader.addURL(candidate.toURI().toURL());
-					CoreModManager.getReparseableCoremods().add(candidate.getName());
+					if(!classLoader.getSources().contains(candidate.toURI().toURL())) {
+						classLoader.addURL(candidate.toURI().toURL());
+						CoreModManager.getReparseableCoremods().add(candidate.getName());
+					}
 				}
 			}
 			catch(Exception e) {
