@@ -4,13 +4,10 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.net.URL;
 import java.util.Collections;
-import java.util.Deque;
 import java.util.LinkedHashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.jar.Attributes;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -84,28 +81,11 @@ public class MixinConBooterCallHook implements IFMLCallHook {
 	}
 
 	public static Set<File> getClasspath() {
-		Deque<URL> toProcess = new LinkedList<>();
-		Collections.addAll(toProcess, classLoader.getURLs());
 		Set<File> classpath = new LinkedHashSet<>();
-		// Expand classpath in case running in VSCode works to some degree
-		while(!toProcess.isEmpty()) {
-			URL url = toProcess.poll();
+		for(URL url : classLoader.getURLs()) {
 			try {
 				File file = new File(url.toURI().getPath());
 				classpath.add(file);
-				if(!file.exists()) {
-					continue;
-				}
-				MainAttributes attr = MainAttributes.of(file);
-				String cp = attr.get(Attributes.Name.CLASS_PATH);
-				if(cp != null) {
-					for(String path : cp.split(" ")) {
-						URL cpUrl = new URL(url, path);
-						if(url.getProtocol().equals("file")) {
-							toProcess.add(cpUrl);
-						}
-					}
-				}
 			}
 			catch(Exception e) {}
 		}
