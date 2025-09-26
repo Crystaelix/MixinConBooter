@@ -39,7 +39,7 @@ def vendor = "thelm"
 def corePluginClass = "com.crystaelix.mixinconbooter.MixinConBooterLoadingPlugin"
 
 group = "com.crystaelix"
-version = "1.2"
+version = "1.3"
 
 def archivesName = "mixinconbooter-legacy"
 base.archivesName = archivesName
