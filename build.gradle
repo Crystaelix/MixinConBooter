@@ -4,7 +4,7 @@ plugins {
 	id "idea"
 	id "maven-publish"
 	id "com.crystaelix.blossom" version "1.3.2"
-	id "me.modmuss50.mod-publish-plugin" version "0.8.4"
+	id "me.modmuss50.mod-publish-plugin" version "1.0.0"
 }
 
 repositories {
@@ -87,7 +87,7 @@ dependencies {
 	legacyForge "net.minecraftforge:forge:1.7.10-10.13.4.1614-1.7.10:universal"
 
 	// Dependencies
-	implementation("com.github.LegacyModdingMC.UniMixins:unimixins-all-1.7.10:0.1.22") {transitive = false}
+	implementation("com.github.LegacyModdingMC.UniMixins:unimixins-all-1.7.10:0.1.23") {transitive = false}
 }
 
 def replacements = [
@@ -108,7 +108,7 @@ processResources {
 }
 
 def manifestAttributes = [
-	"Specification-Title": archivesBaseName,
+	"Specification-Title": archivesName,
 	"Specification-Vendor": vendor,
 	"Specification-Version": specVersion,
 	"Implementation-Title": archivesName,
