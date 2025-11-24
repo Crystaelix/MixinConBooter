@@ -53,7 +53,7 @@ public class MixinConBooterCallHook implements IFMLCallHook {
 		Set<File> candidates = Sets.union(getClasspath(), getModCandidates());
 		for(File candidate : candidates) {
 			try {
-				LOGGER.debug("Scanning file {} for manifest mixin configs", new Object[] {candidate});
+				LOGGER.debug("Scanning file {} for manifest mixin configs", candidate);
 				MainAttributes attr = MainAttributes.of(candidate);
 				if(MIXIN_TWEAKER_CLASS.equals(attr.get(Constants.ManifestAttributes.TWEAKER))) {
 					LOGGER.debug("Skipping as mixin tweaker specified in manifest");
